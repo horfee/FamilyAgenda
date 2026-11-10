@@ -1,0 +1,19 @@
+services:
+  familyagenda:
+    build: .
+    image: familyagenda:latest
+    container_name: familyagenda
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      # Adresse de contact exigée par le protocole Web Push (mailto: ou https://).
+      # Mettez une adresse réelle : Apple (iPhone) répond 403 si elle est invalide (ex. domaine en .local).
+      VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:admin@familyagenda.local}
+      TZ: ${TZ:-Europe/Paris}
+    volumes:
+      # Base SQLite, secret JWT et clés VAPID : à sauvegarder
+      - familyagenda-data:/data
+
+volumes:
+  familyagenda-data:
