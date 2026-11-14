@@ -114,6 +114,15 @@ export function getChangesSince(rev) {
   };
 }
 
+const selectBetween = db.prepare(
+  'SELECT * FROM events WHERE deleted = 0 AND ends_at >= ? AND starts_at <= ? ORDER BY starts_at ASC',
+);
+
+/** Évènements non supprimés qui chevauchent [from, to] (ms). */
+export function getEventsBetween(from, to) {
+  return selectBetween.all(from, to).map(rowToEvent);
+}
+
 export function getEvent(id) {
   const r = selectOne.get(id);
   return r ? rowToEvent(r) : null;

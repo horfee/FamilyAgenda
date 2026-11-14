@@ -142,11 +142,6 @@ function MonthView({ cursor, events, users, onCreate, onOpen, onPickDay }: Props
       <div className="day-list">
         <div className="day-list-head">
           <b>{fmtDayLong(sel)}</b>
-          <span className="spacer" />
-          <button onClick={() => onPickDay(sel)}>Vue jour</button>
-          <button className="primary" onClick={() => onCreate(sel, true)}>
-            + Ajouter
-          </button>
         </div>
         {dayEvents.length === 0 && <p className="muted empty">Rien de prévu ce jour-là.</p>}
         {dayEvents.map((ev) => (
