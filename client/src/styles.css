@@ -145,6 +145,12 @@ main { flex: 1; min-height: 0; display: flex; }
 .swatch.on { box-shadow: 0 0 0 2px var(--text); }
 .swatch.none { opacity: 0.55; }
 .swatch.none.on { opacity: 1; }
+.token-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.token-list li { display: flex; gap: 8px; align-items: center; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; }
+.token-info { flex: 1; min-width: 0; display: flex; flex-direction: column; font-size: 13px; overflow-wrap: anywhere; }
+.token-form { display: flex; flex-direction: column; gap: 12px; }
+.token-created { display: flex; flex-direction: column; gap: 6px; padding: 10px; border-radius: 6px; background: var(--surface); font-size: 13px; }
+.token-created input { font-family: ui-monospace, monospace; }
 .actions { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
 .spacer { flex: 1; }
 

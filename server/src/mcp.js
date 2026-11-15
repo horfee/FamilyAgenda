@@ -107,7 +107,7 @@ function buildServer(user) {
   return server;
 }
 
-/** Route Express `/mcp` (après requireAuth). Mode sans état : un serveur et un transport par requête. */
+/** Route Express `/mcp` (après requireAccessToken). Mode sans état : un serveur et un transport par requête. */
 export async function mcpRoute(req, res) {
   const server = buildServer(req.user);
   const transport = new NodeStreamableHTTPServerTransport({ sessionIdGenerator: undefined });

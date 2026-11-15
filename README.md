@@ -35,6 +35,12 @@ npm start                    # http://localhost:3000
 
 Créez un compte par personne depuis l'écran de connexion. Cliquez sur **Activer les notifications** sur chaque appareil à notifier.
 
+## Serveur MCP et jetons d'accès
+
+Le serveur MCP (`/mcp`, Streamable HTTP) s'authentifie par **jeton d'accès** (`Authorization: Bearer fa_…`). Chaque utilisateur gère ses jetons depuis le bouton **Jetons MCP** (créer, renommer, changer l'expiration, supprimer) ; un jeton peut n'avoir **aucune date d'expiration**. La valeur n'est affichée qu'à la création : seul son hash SHA-256 est stocké. Les actions MCP s'exécutent au nom de l'utilisateur propriétaire du jeton.
+
+API : `GET/POST /api/tokens`, `PATCH/DELETE /api/tokens/:id` (corps : `{ name, expiresAt }`, `expiresAt` en ms ou `null` pour ne jamais expirer). Exportez la valeur dans `FAMILYAGENDA_TOKEN` pour [`.bob/mcp.json`](.bob/mcp.json).
+
 ## Docker
 
 Une seule image contient le serveur et le client compilé.

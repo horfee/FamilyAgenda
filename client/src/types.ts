@@ -22,6 +22,16 @@ export interface AgendaEvent {
   deleted?: boolean;
 }
 
+/** Jeton d'accès (serveur MCP) ; `expiresAt` null = sans expiration. */
+export interface AccessToken {
+  id: string;
+  name: string;
+  prefix: string;
+  expiresAt: number | null;
+  createdAt: number;
+  lastUsedAt: number | null;
+}
+
 /** Mutation en attente d'envoi ; `v` identifie la version locale. */
 export type OutboxEntry = AgendaEvent & { v: number };
 

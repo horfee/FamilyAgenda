@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Calendar, type View } from './Calendar';
 import { EventDialog } from './EventDialog';
 import { Login } from './Login';
+import { TokensDialog } from './TokensDialog';
 import { useAgenda } from './useAgenda';
 import { clearSession, getSession, setSession } from './session';
 import { clearAll } from './localdb';
@@ -49,6 +50,7 @@ function Agenda({ session, onLogout }: { session: Session; onLogout: () => void 
   const [editing, setEditing] = useState<{ ev: AgendaEvent; isNew: boolean } | null>(null);
   const [push, setPush] = useState<PushState>('off');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [tokensOpen, setTokensOpen] = useState(false);
 
   useEffect(() => {
     void getPushState().then(setPush);
@@ -179,6 +181,7 @@ function Agenda({ session, onLogout }: { session: Session; onLogout: () => void 
               {push === 'on' ? 'Notifications : oui' : 'Activer les notifications'}
             </button>
           )}
+          <button onClick={() => setTokensOpen(true)}>Jetons MCP</button>
           <div className="me">
             <span className="avatar" style={{ background: session.user.color }}>
               {session.user.name[0]?.toUpperCase()}
@@ -214,6 +217,8 @@ function Agenda({ session, onLogout }: { session: Session; onLogout: () => void 
           }}
         />
       </main>
+
+      {tokensOpen && <TokensDialog token={session.token} onClose={() => setTokensOpen(false)} />}
 
       {editing && (
         <EventDialog

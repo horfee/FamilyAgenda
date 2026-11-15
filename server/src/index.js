@@ -8,6 +8,7 @@ import { sanitizeEvent } from './events.js';
 import { mcpRoute } from './mcp.js';
 import { removeSubscription, saveSubscription, vapidPublicKey } from './push.js';
 import { startScheduler } from './scheduler.js';
+import { createToken, deleteToken, listTokens, requireAccessToken, updateToken } from './tokens.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -30,6 +31,14 @@ app.post('/api/login', (req, res) => {
 
 app.get('/api/me', requireAuth, (req, res) => res.json({ user: req.user }));
 app.get('/api/users', requireAuth, (_req, res) => res.json({ users: listUsers() }));
+
+// --- Jetons d'accès (MCP) ---------------------------------------------------
+const reply = (res, r) => (r.error ? res.status(r.status).json({ error: r.error }) : res.json(r));
+
+app.get('/api/tokens', requireAuth, (req, res) => res.json({ tokens: listTokens(req.user.id) }));
+app.post('/api/tokens', requireAuth, (req, res) => reply(res, createToken(req.user.id, req.body)));
+app.patch('/api/tokens/:id', requireAuth, (req, res) => reply(res, updateToken(req.user.id, req.params.id, req.body)));
+app.delete('/api/tokens/:id', requireAuth, (req, res) => reply(res, deleteToken(req.user.id, req.params.id)));
 
 // --- Push -----------------------------------------------------------------
 app.get('/api/push/key', requireAuth, (_req, res) => res.json({ publicKey: vapidPublicKey }));
@@ -82,8 +91,8 @@ app.post('/api/sync', requireAuth, (req, res) => {
   res.json({ events, cursor: newCursor, users, rejected });
 });
 
-// --- MCP (Streamable HTTP, authentification Bearer identique à l'API) -------
-app.all('/mcp', requireAuth, mcpRoute);
+// --- MCP (Streamable HTTP, authentification par jeton d'accès Bearer) --------
+app.all('/mcp', requireAccessToken, mcpRoute);
 
 // --- Client statique (production) ----------------------------------------
 const dist = join(here, '..', '..', 'client', 'dist');
